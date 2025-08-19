@@ -18,37 +18,50 @@
 </head>
 <body>
   <h1>RawGraphs - Agosto 2025</h1>
+  
   <object data="082025.svg" type="image/svg+xml"></object>
 
-  <h1>Dataset</h1>
+  <h2>Dataset CSV</h2>
   <table id="tabla" class="display" style="width:100%"></table>
 
-  <!-- Librerías -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <!-- jQuery y DataTables -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <!-- PapaParse para leer CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <script>
     
-    const csvFile = "202508_fit.csv"; 
+    const csvFile = "082025_fit.csv";  
 
     Papa.parse(csvFile, {
       download: true,
-      header: true,  
+      header: true,          
+      skipEmptyLines: true,  
+      dynamicTyping: true,   
       complete: function(results) {
-        const data = results.data;
+        let data = results.data;
 
         
-        const columnas = Object.keys(data[0]).map(col => ({ title: col, data: col }));
+        data = data.filter(row => 
+          Object.keys(row).length === Object.keys(data[0]).length
+        );
 
-      
+        
+        const columnas = Object.keys(data[0]).map(col => ({
+          title: col,
+          data: col
+        }));
+
+        
         $('#tabla').DataTable({
           data: data,
           columns: columnas,
-          pageLength: 10
+          pageLength: 20
         });
       }
     });
   </script>
 </body>
+
 </html>
