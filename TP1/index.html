@@ -8,5 +8,36 @@
 <body>
   <h1>RawGraphs - Agosto 2025</h1>
   <object data="082025.svg" type="image/svg+xml"></object>
+
+  <h1>Dataset</h1>
+  <table id="tabla" class="display" style="width:100%"></table>
+
+  <!-- Librerías -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <script>
+    
+    const csvFile = "082025.csv"; 
+
+    Papa.parse(csvFile, {
+      download: true,
+      header: true,  
+      complete: function(results) {
+        const data = results.data;
+
+        
+        const columnas = Object.keys(data[0]).map(col => ({ title: col, data: col }));
+
+      
+        $('#tabla').DataTable({
+          data: data,
+          columns: columnas,
+          pageLength: 10
+        });
+      }
+    });
+  </script>
 </body>
 </html>
